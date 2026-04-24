@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1440">
 <title>Meridian — Business Intelligence for Modern Teams</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest"></script>
+<script>window.lucide = window.lucide || { createIcons(){} };</script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -27,7 +26,7 @@
     height: 72px;
   }
   .nav-logo {
-    font-family: 'Noto Serif SC', serif;
+    font-family: 'Noto Serif KR', serif;
     font-size: 20px;
     font-weight: 500;
     letter-spacing: -0.3px;
@@ -114,7 +113,7 @@
     margin-bottom: 20px;
   }
   .hero-headline {
-    font-family: 'Noto Serif SC', serif;
+    font-family: 'Noto Serif KR', serif;
     font-size: 44px;
     font-weight: 400;
     line-height: 1.25;
@@ -223,7 +222,7 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.03);
   }
   .metric-card-value {
-    font-family: 'Noto Serif SC', serif;
+    font-family: 'Noto Serif KR', serif;
     font-size: 28px;
     font-weight: 400;
     color: #2a2a2a;
@@ -597,7 +596,7 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    lucide.createIcons();
+    window.lucide?.createIcons?.();
   });
 </script>
 </body>

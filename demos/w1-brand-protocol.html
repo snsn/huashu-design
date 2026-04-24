@@ -1,12 +1,8 @@
 <!doctype html>
-<html lang="zh-Hans">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>w1 · 品牌协议 · 五步不能跳</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Noto+Serif+SC:wght@200;300;400;500;600&family=Inter:wght@100;200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
+<title>w1 · Brand Protocol · Five steps, no skipping</title><style>
   :root {
     --bg: #000000;
     --ink: #FFFFFF;
@@ -21,9 +17,9 @@
     --cd-panel: #FFFFFF;
     --cd-ink: #1A1918;
 
-    --serif-zh: "Noto Serif SC", "Songti SC", serif;
+    --serif-zh: "Noto Serif KR", "Songti SC", serif;
     --serif-en: "Source Serif 4", "Tiempos Headline", Georgia, serif;
-    --sans: "Inter", -apple-system, "PingFang SC", "HarmonyOS Sans SC", system-ui, sans-serif;
+    --sans: "Inter", -apple-system, "Apple SD Gothic Neo", "HarmonyOS Sans SC", system-ui, sans-serif;
     --mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
   }
   html, body {
@@ -176,20 +172,13 @@
     text-align: center;
   }
   .card-label .zh {
-    font-family: var(--serif-zh);
-    font-size: 32px;
+    font-family: var(--serif-en);
+    font-size: 36px;
+    font-style: italic;
     font-weight: 300;
     color: var(--ink);
-    letter-spacing: 0.04em;
+    letter-spacing: -0.01em;
     line-height: 1;
-    margin-bottom: 10px;
-  }
-  .card-label .en {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.22em;
-    color: var(--muted);
-    text-transform: uppercase;
   }
 
   /* Glyph · Step 1 · Ask (question mark inside a circle, drawn minimal) */
@@ -372,11 +361,11 @@
     border-radius: 50%;
   }
   .final-file .h1 {
-    font-family: var(--serif-zh);
-    font-size: 26px;
+    font-family: var(--serif-en);
+    font-size: 28px;
     font-weight: 400;
     margin: 0 0 18px;
-    letter-spacing: 0.02em;
+    letter-spacing: -0.015em;
   }
   .final-file .kv {
     font-family: var(--mono);
@@ -445,7 +434,7 @@
     <div class="mark">HUASHU · DESIGN</div>
     <div class="mark-right">V2 · 2026</div>
 
-    <div class="title-line" id="titleLine">w1 · 品牌协议</div>
+    <div class="title-line" id="titleLine">w1 · brand protocol</div>
 
     <div class="chain">
       <div class="chain-line" id="chainLine"></div>
@@ -454,8 +443,7 @@
         <div class="card-num">STEP 01</div>
         <div class="card-glyph"><div class="g-ask">?</div></div>
         <div class="card-label">
-          <div class="zh">问</div>
-          <div class="en">Ask</div>
+          <div class="zh">Ask</div>
         </div>
       </div>
 
@@ -469,8 +457,7 @@
           </div>
         </div>
         <div class="card-label">
-          <div class="zh">搜</div>
-          <div class="en">Search</div>
+          <div class="zh">Search</div>
         </div>
       </div>
 
@@ -483,8 +470,7 @@
           </div>
         </div>
         <div class="card-label">
-          <div class="zh">下</div>
-          <div class="en">Grab</div>
+          <div class="zh">Grab</div>
         </div>
       </div>
 
@@ -499,8 +485,7 @@
           </div>
         </div>
         <div class="card-label">
-          <div class="zh">grep</div>
-          <div class="en">Extract</div>
+          <div class="zh">Grep</div>
         </div>
       </div>
 
@@ -518,15 +503,14 @@
           </div>
         </div>
         <div class="card-label">
-          <div class="zh">定</div>
-          <div class="en">Lock</div>
+          <div class="zh">Lock</div>
         </div>
       </div>
     </div>
 
     <div class="final-file" id="finalFile">
       <div class="file-name">brand-spec.md</div>
-      <div class="h1">资产已固化<span class="caret"></span></div>
+      <div class="h1">Assets locked in<span class="caret"></span></div>
       <div class="kv">
         <div><span class="k">logo</span> · assets/logo.svg</div>
         <div><span class="k">hero</span> · product-hero.png</div>

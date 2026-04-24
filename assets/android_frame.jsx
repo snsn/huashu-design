@@ -1,9 +1,9 @@
 /**
- * AndroidFrame — Android设备边框（参考Pixel 8系列）
+ * AndroidFrame — Android 기기 프레임(Pixel 8 계열 참고)
  *
- * 含：punch-hole相机 + 状态栏 + 导航栏 + 圆角
+ * 포함: punch-hole 카메라 + 상태바 + 내비게이션바 + 라운드 모서리
  *
- * 用法：
+ * 사용법:
  *   <AndroidFrame time="9:41" battery={85}>
  *     <YourAppContent />
  *   </AndroidFrame>

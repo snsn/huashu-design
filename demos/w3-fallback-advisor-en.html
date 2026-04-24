@@ -2,11 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>w3 · Fallback Advisor (English)</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
+<title>w3 · Fallback Advisor (English)</title><style>
   :root {
     --bg: #000000;
     --ink: #FFFFFF;
@@ -347,7 +343,7 @@
         <div class="feature">Terracotta · Vast whitespace · Paper grain</div>
       </div>
       <div class="thumb-wrap" id="thumb1">
-        <img src="demo-takram.png" alt="demo takram" />
+        <img src="../assets/showcases/website-ai-nav/ainav-takram.png" alt="demo takram" />
       </div>
     </div>
     <div class="fg-card" id="card2">
@@ -358,7 +354,7 @@
         <div class="feature">Strict grid · High contrast · Editorial</div>
       </div>
       <div class="thumb-wrap" id="thumb2">
-        <img src="demo-pentagram.png" alt="demo pentagram" />
+        <img src="../assets/showcases/website-ai-nav/ainav-pentagram.png" alt="demo pentagram" />
       </div>
     </div>
     <div class="fg-card" id="card3">
@@ -369,7 +365,7 @@
         <div class="feature">Broken type · Brutal geometry · Visual shock</div>
       </div>
       <div class="thumb-wrap" id="thumb3">
-        <img src="demo-build.png" alt="demo build" />
+        <img src="../assets/showcases/website-ai-nav/ainav-build.png" alt="demo build" />
       </div>
     </div>
   </div>
@@ -452,6 +448,16 @@
     return svgs[kind] || svgs.minimal;
   }
 
+  function makeGlyphNode(kind) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(makeGlyph(kind), 'image/svg+xml');
+    const svg = doc.documentElement;
+    if (!svg || svg.nodeName === 'parsererror') {
+      return document.createTextNode('');
+    }
+    return document.importNode(svg, true);
+  }
+
   const wallGrid = document.getElementById('wallGrid');
   PHILOSOPHIES.forEach((p, idx) => {
     const cell = document.createElement('div');
@@ -463,11 +469,19 @@
     const dc = col - 2;
     const dist = Math.sqrt(dr * dr + dc * dc);
     cell.dataset.dist = dist.toFixed(3);
-    cell.innerHTML = `
-      <div class="glyph">${makeGlyph(p.glyph)}</div>
-      <div class="num">${String(idx + 1).padStart(2, '0')}</div>
-      <div class="name">${p.name}</div>
-    `;
+    const glyph = document.createElement('div');
+    glyph.className = 'glyph';
+    glyph.appendChild(makeGlyphNode(p.glyph));
+
+    const num = document.createElement('div');
+    num.className = 'num';
+    num.textContent = String(idx + 1).padStart(2, '0');
+
+    const name = document.createElement('div');
+    name.className = 'name';
+    name.textContent = p.name;
+
+    cell.replaceChildren(glyph, num, name);
     wallGrid.appendChild(cell);
   });
 

@@ -1,7 +1,7 @@
 /**
- * MacosWindow — macOS应用窗口边框（含traffic lights）
+ * MacosWindow — macOS 앱 창 프레임(traffic lights 포함)
  *
- * 用法：
+ * 사용법:
  *   <MacosWindow title="Finder">
  *     <YourAppContent />
  *   </MacosWindow>

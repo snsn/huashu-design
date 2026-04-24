@@ -1,12 +1,8 @@
 <!doctype html>
-<html lang="zh-Hans">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>w2 · 粗糙的第一版，好过完美的大招</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Noto+Serif+SC:wght@200;300;400;500;600&family=Inter:wght@100;200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
+<title>w2 · Rough draft now beats perfect draft later</title><style>
   :root {
     --bg: #000000;
     --ink: #FFFFFF;
@@ -17,16 +13,16 @@
     --hairline: rgba(255,255,255,0.12);
     --accent: #D97757;
     --accent-deep: #B85D3D;
-    --bad: #6E3A2E;           /* 失败暗红调，不刺眼 */
-    --bad-strong: #C85A42;    /* 失败叉号强调，对比度提升 */
-    --cool: rgba(255,255,255,0.42); /* 冷色参考线（左路径） */
+    --bad: #6E3A2E;           /* 한국어，한국어 */
+    --bad-strong: #C85A42;    /* 한국어，한국어 */
+    --cool: rgba(255,255,255,0.42); /* 한국어（한국어） */
     --cd-bg: #F5F4F0;
     --cd-panel: #FFFFFF;
     --cd-ink: #1A1918;
 
-    --serif-zh: "Noto Serif SC", "Songti SC", serif;
+    --serif-zh: "Noto Serif KR", "Songti SC", serif;
     --serif-en: "Source Serif 4", "Tiempos Headline", Georgia, serif;
-    --sans: "Inter", -apple-system, "PingFang SC", "HarmonyOS Sans SC", system-ui, sans-serif;
+    --sans: "Inter", -apple-system, "Apple SD Gothic Neo", "HarmonyOS Sans SC", system-ui, sans-serif;
     --mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
   }
   html, body {
@@ -130,7 +126,7 @@
   }
 
   /* ======================================================
-   * TOP HALF · 闷头一把梭（3 hours, all at once）
+   * TOP HALF · 한국어（3 hours, all at once）
    * ====================================================== */
   .half-top {
     position: absolute;
@@ -286,7 +282,7 @@
   }
 
   /* ======================================================
-   * BOTTOM HALF · 尽早 show（small iterations）
+   * BOTTOM HALF · 한국어 show（small iterations）
    * ====================================================== */
   .half-bot {
     position: absolute;
@@ -512,7 +508,7 @@
   }
 
   /* ======================================================
-   * BRAND REVEAL — 统一动作
+   * BRAND REVEAL — 한국어
    * ====================================================== */
   .brand-sheet {
     position: absolute;
@@ -556,7 +552,7 @@
     <div class="mark">HUASHU · DESIGN</div>
     <div class="mark-right">V2 · 2026</div>
 
-    <div class="title-line" id="titleLine">w2 · 粗糙的第一版，好过完美的大招</div>
+    <div class="title-line" id="titleLine">w2 · rough draft now beats perfect draft later</div>
 
     <!-- Splitter -->
     <div class="splitter" id="splitter"></div>
@@ -566,8 +562,8 @@
     <div class="half-top" id="halfTop">
       <div class="half-label">
         <span class="tag">A</span>
-        <span class="zh">闷头一把梭</span>
-        <span style="font-family: var(--mono); color: var(--muted); letter-spacing: 0.18em; font-size: 11px; margin-left: auto;">ALL&nbsp;AT&nbsp;ONCE</span>
+        <span class="zh" style="font-family: var(--serif-en); font-style: italic; letter-spacing: 0.01em;">All-at-once</span>
+        <span style="font-family: var(--mono); color: var(--muted); letter-spacing: 0.18em; font-size: 11px; margin-left: auto;">3&nbsp;HOUR&nbsp;SESSION</span>
       </div>
       <div class="terminal-big">
         <div class="tty-head">
@@ -575,7 +571,7 @@
           <div class="tty-title">designer@studio · 3h session</div>
         </div>
         <div class="tty-body">
-          <div class="line" id="ttyL1"><span class="prompt">$</span>build final_design.html <span class="dim">// v1.0 · 一次做完</span></div>
+          <div class="line" id="ttyL1"><span class="prompt">$</span>build final_design.html <span class="dim">// v1.0 · ship it all at once</span></div>
           <div class="progress-row" id="progRow">
             <div class="progress-bar" id="progBar">
               <div class="progress-bar-fill" id="progFill"></div>
@@ -598,8 +594,8 @@
     <div class="half-bot" id="halfBot">
       <div class="half-label">
         <span class="tag">B</span>
-        <span class="zh">尽早 show</span>
-        <span style="font-family: var(--mono); color: var(--muted); letter-spacing: 0.18em; font-size: 11px; margin-left: auto;">SHOW&nbsp;EARLY</span>
+        <span class="zh" style="font-family: var(--serif-en); font-style: italic; letter-spacing: 0.01em;">Show early</span>
+        <span style="font-family: var(--mono); color: var(--muted); letter-spacing: 0.18em; font-size: 11px; margin-left: auto;">SMALL&nbsp;ITERATIONS</span>
       </div>
       <div class="iter-row">
         <div class="iter-panel" id="iter1">
@@ -670,21 +666,17 @@
         <text class="tick-label" x="1200" y="545" text-anchor="middle">3h</text>
 
         <!-- Curve A (All-at-once): flat crawl near zero, late spike, then crash -->
-        <!-- Narrative: 3 hours of silent work → finally reveal at 99% → rejected → drops -->
         <path class="curve-a" id="curveA"
               d="M 110 500 L 400 495 L 700 490 L 1000 485 L 1140 180" />
-        <!-- Fall after rejection, red dashed -->
         <path class="curve-a-dash" id="curveACrash"
               d="M 1140 180 L 1200 510" />
         <circle class="fail-dot" id="failDot" cx="1140" cy="180" r="9"/>
-        <!-- Small X marker on top of the fail dot -->
         <g id="failX" opacity="0">
           <line x1="1130" y1="170" x2="1150" y2="190" stroke="#C85A42" stroke-width="2.5" stroke-linecap="round"/>
           <line x1="1150" y1="170" x2="1130" y2="190" stroke="#C85A42" stroke-width="2.5" stroke-linecap="round"/>
         </g>
 
-        <!-- Anchor for A (right side, top near the spike) -->
-        <text class="anchor-label" x="1200" y="150" fill="#C85A42" text-anchor="end">闷头一把梭</text>
+        <text class="anchor-label" x="1200" y="150" fill="#C85A42" text-anchor="end" style="font-family: var(--serif-en); font-style: italic;">All-at-once</text>
         <text class="anchor-en" x="1200" y="170" fill="#C85A42" text-anchor="end">REJECTED</text>
 
         <!-- Curve B (Show early): steady step rise across first 35 min -->
@@ -696,11 +688,9 @@
         <circle class="curve-dot" cx="480" cy="270" r="6"/>
         <circle class="curve-dot" cx="680" cy="140" r="8"/>
 
-        <!-- Anchor for B (above the peak dot on left-ish side) -->
-        <text class="anchor-label" x="680" y="115" fill="#D97757" text-anchor="middle">尽早 show</text>
+        <text class="anchor-label" x="680" y="115" fill="#D97757" text-anchor="middle" style="font-family: var(--serif-en); font-style: italic;">Show early</text>
         <text class="anchor-en" x="680" y="96" fill="#D97757" text-anchor="middle">SHIPPED</text>
 
-        <!-- Legend hint: tiny label on A's plateau -->
         <text class="tick-label" x="555" y="477" text-anchor="middle" fill="rgba(255,255,255,0.3)" style="letter-spacing: 0.12em;">— 3 hours silence —</text>
       </svg>
     </div>
@@ -751,12 +741,12 @@
   // 0.6-1.4    two half-labels fade in (top first, then bot)
   // 1.4-2.0    top terminal line 1 types; bot panel 1 enters
   //
-  // Top track (闷头):
+  // Top track (한국어):
   //   2.0-7.8  progress bar crawls from 0 to 99% (slow, painful)
   //   7.8-8.4  stuck at 99%
   //   8.4-8.9  fail stamp lands + bar turns red + bar drops to 0
   //
-  // Bottom track (尽早):
+  // Bottom track (한국어):
   //   2.0-2.6  iter1 enters, nod1 appears @ 2.8
   //   3.6-4.2  iter2 enters, nod2 appears @ 4.4
   //   5.6-6.2  iter3 enters, nod3 appears @ 6.4 (final tick — biggest)
@@ -937,17 +927,14 @@
     const chartIn = seg(t, 8.5, 9.2);
     el.finalChart.style.opacity = cubicOut(chartIn);
 
-    // Curve B draws first (our hero path, 8.8-9.8), curve A follows (9.0-9.6 flat + spike)
     const curveBT = seg(t, 8.8, 9.8);
     el.curveB.style.strokeDashoffset = lenB * (1 - expoOut(curveBT));
     el.curveBGlow.style.strokeDashoffset = lenB * (1 - expoOut(curveBT));
 
     const curveAT = seg(t, 8.9, 9.7);
     el.curveA.style.strokeDashoffset = lenA * (1 - cubicOut(curveAT));
-    // Crash dash — only after curveA reaches peak AND the X lands
     const curveACrashT = seg(t, 9.7, 9.95);
     el.curveACrash.style.strokeDashoffset = lenACrash * (1 - expoOut(curveACrashT));
-    // Fail X pops in right when curve A hits the spike
     const failXT = seg(t, 9.65, 9.85);
     const failXEl = document.getElementById('failX');
     if (failXEl) {
@@ -956,9 +943,7 @@
       failXEl.style.transformOrigin = '1140px 180px';
     }
 
-    // Dots fade in progressively (skip the fail-dot which is handled via X)
     chartDots.forEach((dot, i) => {
-      // curve-dot for B (3 dots), fail-dot (1 dot)
       const dotT = seg(t, 9.0 + i * 0.12, 9.3 + i * 0.12);
       dot.style.opacity = cubicOut(dotT);
     });

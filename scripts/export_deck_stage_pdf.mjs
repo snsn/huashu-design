@@ -1,46 +1,57 @@
 #!/usr/bin/env node
 /**
- * export_deck_stage_pdf.mjs — 单文件 <deck-stage> 架构专用 PDF 导出
+ * export_deck_stage_pdf.mjs — 단일 파일 <deck-stage> 구조 전용 PDF 내보내기
  *
- * 用法：
+ * 사용법:
  *   node export_deck_stage_pdf.mjs --html <deck.html> --out <file.pdf> [--width 1920] [--height 1080]
  *
- * 什么时候用这个脚本？
- *   - 你的 deck 是**单 HTML 文件**，所有 slide 是 `<section>`，外层用 `<deck-stage>` 包裹
- *   - 此时 `export_deck_pdf.mjs`（多文件专用）用不上
+ * 이 스크립트를 쓰는 경우:
+ *   - deck이 단일 HTML 파일이고 모든 slide가 `<section>`이며 외부가 `<deck-stage>`로 감싸진 경우
+ *   - 이때는 여러 파일 전용 `export_deck_pdf.mjs`가 맞지 않습니다
  *
- * 为什么不能直接 `page.pdf()`（2026-04-20 踩坑记录）：
- *   1. deck-stage 的 shadow CSS `::slotted(section) { display: none }` 让只有 active slide 可见
- *   2. print 媒体下外层 `!important` 压不住 shadow DOM 规则
- *   3. 结果：PDF 永远只有 1 页（active 那张）
+ * `page.pdf()`를 바로 쓰지 않는 이유：
+ *   1. deck-stage의 shadow CSS `::slotted(section) { display: none }` 때문에 active slide만 보입니다
+ *   2. print media에서 외부 `!important`만으로는 shadow DOM 규칙을 이길 수 없습니다
+ *   3. 결과: PDF가 항상 active slide 한 페이지만 생성됩니다
  *
- * 解决方案：
- *   打开 HTML 后，用 page.evaluate 把所有 section 从 deck-stage slot 拔出来，
- *   挂到 body 下一个普通 div，内联 style 强制 position:relative + 固定尺寸，
- *   每个 section 加 page-break-after: always，最后一个改 auto 避免尾部空白页。
+ * 해결책:
+ *   HTML을 연 뒤 page.evaluate로 모든 section을 deck-stage slot에서 꺼냅니다.
+ *   body 아래 일반 div에 붙이고 inline style로 position:relative와 고정 크기를 강제합니다.
+ *   각 section에 page-break-after: always를 적용하고 마지막만 auto로 바꿔 빈 끝 페이지를 피합니다.
  *
- * 依赖：playwright
+ * 필요 조건:playwright
  *   npm install playwright
  *
- * 输出特点：
- *   - 文字保留矢量（可复制、可搜索）
- *   - 视觉 1:1 保真
- *   - 字体必须能被 Chromium 加载（本地字体或 Google Fonts）
+ * 출력 특징:
+ *   - 텍스트를 벡터로 유지(복사/검색 가능)
+ *   - 시각 1:1 보존
+ *   - 폰트는 Chromium이 로드할 수 있어야 합니다(로컬 또는 Google Fonts)
  */
 
-import { chromium } from 'playwright';
 import fs from 'fs/promises';
 import path from 'path';
 
+function printUsage() {
+  console.log('사용법: node export_deck_stage_pdf.mjs --html <deck.html> --out <file.pdf> [--width 1920] [--height 1080]');
+}
+
 function parseArgs() {
+  if (process.argv.includes('--help') || process.argv.includes('-h')) {
+    console.log('사용법: node export_deck_stage_pdf.mjs --html <deck.html> --out <file.pdf> [--width 1920] [--height 1080]');
+    process.exit(0);
+  }
   const args = { width: 1920, height: 1080 };
   const a = process.argv.slice(2);
+  if (a.includes('--help') || a.includes('-h')) {
+    printUsage();
+    process.exit(0);
+  }
   for (let i = 0; i < a.length; i += 2) {
     const k = a[i].replace(/^--/, '');
     args[k] = a[i + 1];
   }
   if (!args.html || !args.out) {
-    console.error('用法: node export_deck_stage_pdf.mjs --html <deck.html> --out <file.pdf> [--width 1920] [--height 1080]');
+    printUsage();
     process.exit(1);
   }
   args.width = parseInt(args.width);
@@ -48,8 +59,20 @@ function parseArgs() {
   return args;
 }
 
+async function importPlaywright() {
+  try {
+    return await import('playwright');
+  } catch (error) {
+    console.error('오류: playwright 모듈을 찾을 수 없습니다.');
+    console.error('설치 예: npm install playwright');
+    console.error(`상세: ${error.message}`);
+    process.exit(1);
+  }
+}
+
 async function main() {
   const { html, out, width, height } = parseArgs();
+  const { chromium } = await importPlaywright();
   const htmlAbs = path.resolve(html);
   const outFile = path.resolve(out);
 
@@ -65,16 +88,16 @@ async function main() {
   const page = await ctx.newPage();
 
   await page.goto('file://' + htmlAbs, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(2500);  // 等 Google Fonts + deck-stage init
+  await page.waitForTimeout(2500);  // Google Fonts + deck-stage 초기화 대기
 
-  // 核心修复：把 section 从 shadow DOM slot 拔出来摊平
+  // 핵심 보정: section을 deck-stage slot에서 꺼내 펼침
   const sectionCount = await page.evaluate(({ W, H }) => {
     const stage = document.querySelector('deck-stage');
-    if (!stage) throw new Error('<deck-stage> not found — 这个脚本只适用于单文件 deck-stage 架构');
+    if (!stage) throw new Error('<deck-stage> not found — 이 스크립트는 단일 파일 deck-stage 구조에만 사용할 수 있습니다');
     const sections = Array.from(stage.querySelectorAll(':scope > section'));
     if (!sections.length) throw new Error('No <section> found inside <deck-stage>');
 
-    // 注入打印样式
+    // 프린트 스타일 삽입
     const style = document.createElement('style');
     style.textContent = `
       @page { size: ${W}px ${H}px; margin: 0; }
@@ -83,11 +106,11 @@ async function main() {
     `;
     document.head.appendChild(style);
 
-    // 摊平到 body 下
+    // body 아래로 펼침
     const container = document.createElement('div');
     container.id = 'print-container';
     sections.forEach(s => {
-      // 内联 style 拿到最高优先级；确保 position:relative 让 absolute 子元素正确约束
+      // inline style로 우선순위를 확보하고 position:relative로 absolute 자식의 기준을 고정
       s.style.cssText = `
         width: ${W}px !important;
         height: ${H}px !important;
@@ -101,7 +124,7 @@ async function main() {
       `;
       container.appendChild(s);
     });
-    // 最后一页不分页，避免尾部空白页
+    // 마지막 페이지는 page break를 제거해 빈 끝 페이지를 피함
     const last = sections[sections.length - 1];
     last.style.pageBreakAfter = 'auto';
     last.style.breakAfter = 'auto';
@@ -124,7 +147,7 @@ async function main() {
   const stat = await fs.stat(outFile);
   const kb = (stat.size / 1024).toFixed(0);
   console.log(`\n✓ Wrote ${outFile}  (${kb} KB, ${sectionCount} pages, vector)`);
-  console.log(`  验证页数：mdimport "${outFile}" && pdfinfo "${outFile}" | grep Pages`);
+  console.log(`  페이지 수 검증：mdimport "${outFile}" && pdfinfo "${outFile}" | grep Pages`);
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

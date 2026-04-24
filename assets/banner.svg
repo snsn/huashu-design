@@ -1,7 +1,7 @@
 <svg width="1200" height="400" viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;family=Noto+Serif+SC:wght@700;900&amp;display=swap');
+      /* 원격 폰트 import 제거: 시스템 폰트 사용 */
     </style>
 
     <!-- Warm accent gradients for mini mockup highlights -->
@@ -60,12 +60,12 @@
   <text
     x="80"
     y="222"
-    font-family="'Noto Serif SC', 'Source Han Serif', 'Inter', serif"
+    font-family="'Noto Serif KR', 'Noto Serif KR', 'Inter', serif"
     font-size="22"
     font-weight="700"
     fill="#EEEEEE"
     letter-spacing="1"
-  >用 HTML 做设计的 skill</text>
+  >HTML로 디자인하는 한국어 스킬</text>
 
   <!-- Tagline -->
   <text
@@ -76,15 +76,15 @@
     font-weight="500"
     fill="#BBBBBB"
     letter-spacing="0.5"
-  >高保真原型</text>
+  >고충실도 프로토타입</text>
   <text x="176" y="284" font-family="'Inter', sans-serif" font-size="15" font-weight="700" fill="#D4532B">·</text>
-  <text x="188" y="284" font-family="'Inter', sans-serif" font-size="15" font-weight="500" fill="#BBBBBB" letter-spacing="0.5">幻灯片</text>
+  <text x="188" y="284" font-family="'Inter', sans-serif" font-size="15" font-weight="500" fill="#BBBBBB" letter-spacing="0.5">고충실도 프로토타입</text>
   <text x="260" y="284" font-family="'Inter', sans-serif" font-size="15" font-weight="700" fill="#D4532B">·</text>
-  <text x="272" y="284" font-family="'Inter', sans-serif" font-size="15" font-weight="500" fill="#BBBBBB" letter-spacing="0.5">动画</text>
+  <text x="272" y="284" font-family="'Inter', sans-serif" font-size="15" font-weight="500" fill="#BBBBBB" letter-spacing="0.5">고충실도 프로토타입</text>
   <text x="320" y="284" font-family="'Inter', sans-serif" font-size="15" font-weight="700" fill="#D4532B">·</text>
-  <text x="332" y="284" font-family="'Inter', sans-serif" font-size="15" font-weight="500" fill="#BBBBBB" letter-spacing="0.5">信息图</text>
+  <text x="332" y="284" font-family="'Inter', sans-serif" font-size="15" font-weight="500" fill="#BBBBBB" letter-spacing="0.5">고충실도 프로토타입</text>
   <text x="404" y="284" font-family="'Inter', sans-serif" font-size="15" font-weight="700" fill="#D4532B">·</text>
-  <text x="416" y="284" font-family="'Inter', sans-serif" font-size="15" font-weight="500" fill="#BBBBBB" letter-spacing="0.5">App 原型</text>
+  <text x="416" y="284" font-family="'Inter', sans-serif" font-size="15" font-weight="500" fill="#BBBBBB" letter-spacing="0.5">App 프로토타입</text>
 
   <!-- Second tagline row -->
   <text
@@ -95,7 +95,7 @@
     font-weight="400"
     fill="#888888"
     letter-spacing="0.3"
-  >20 种设计哲学  ·  5 维专家评审  ·  发布会级动画导出</text>
+  >20 design styles  ·  5-axis expert review  ·  launch-grade motion export</text>
 
   <!-- Footer credit -->
   <text

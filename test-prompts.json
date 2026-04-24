@@ -1,38 +1,26 @@
 [
   {
-    "id": 1,
-    "prompt": "我想做一个SaaS产品的登录页面，给我3个风格方向对比看看",
-    "expected": "触发clarifying questions问design context/brand；产出3个variation的design_canvas；不用紫渐变/emoji/Inter等AI slop；有具体理由说明每个variation的差异维度",
-    "tests": "workflow问问题 + variations逻辑 + 反AI slop清单 + design_canvas使用"
+    "name": "SaaS 로그인 페이지 방향 탐색",
+    "prompt": "SaaS 제품 로그인 페이지를 만들고 싶어. 서로 다른 3가지 디자인 방향을 비교해서 보여줘.",
+    "expected": "디자인 맥락과 브랜드 자산을 먼저 확인하고, design_canvas로 3가지 변형을 제시한다. 보라색 그라데이션/이모지/AI식 둥근 카드 남용을 피하고 각 방향의 판단 기준을 설명한다.",
+    "tests": "요구 확인 + 변형 비교 + anti-slop 규칙 + design_canvas 사용"
   },
   {
-    "id": 2,
-    "prompt": "帮我做一份10页的产品pitch deck，讲一个AI工具的创业项目",
-    "expected": "用deck_stage.js起手；先口头vocalize设计系统（色彩/字型/layout节奏）等确认；Section divider/content/data/quote多种layout交替；字号≥24px；1-indexed labels",
-    "tests": "Junior Designer先汇报再做 + deck_stage使用 + 视觉节奏 + scale规范"
+    "name": "제품 피치덱",
+    "prompt": "AI 도구 스타트업을 설명하는 10페이지 제품 피치덱을 만들어줘.",
+    "expected": "먼저 색상/폰트/레이아웃 리듬을 제안하고, deck_stage.js 또는 deck_index.html 구조로 HTML 발표본을 만든다. 섹션/콘텐츠/데이터/인용 슬라이드를 섞고 본문 글자는 발표 가능한 크기를 유지한다.",
+    "tests": "슬라이드 구조 선택 + 시각 리듬 + 발표 가독성 + PDF/PPTX 내보내기 경로 안내"
   },
   {
-    "id": 3,
-    "prompt": "做个30秒的HTML动画，讲神经网络怎么工作",
-    "expected": "用animations.jsx的Stage+Sprite；先写时间轴再写组件；入场easeOut出场easeIn；分phase讲故事而不是堆动画；文字停留≥3秒",
-    "tests": "animations工作流 + easing正确 + 节奏设计 + 时长控制"
+    "name": "30초 모션 설명",
+    "prompt": "신경망이 어떻게 작동하는지 설명하는 30초 HTML 애니메이션을 만들어줘.",
+    "expected": "Stage/Sprite 기반으로 먼저 타임라인을 작성한다. 각 장면은 3초 이상 읽을 수 있게 유지하고, easeOut/easeIn 전환과 window.__ready 신호를 포함한다.",
+    "tests": "animations.jsx 워크플로 + 타임라인 + easing + 렌더 비디오 준비"
   },
   {
-    "id": 4,
-    "prompt": "做一个 Habit Tracker App 原型",
-    "expected": "问用户要 overview 平铺 or flow demo（默认走 overview）；用 assets/ios_frame.jsx，不手写 Dynamic Island；Tracker 属高密度型，每屏 ≥ 3 处信息密度元素（习惯完成率、连续天数、趋势曲线、成就badge等，非装饰）；至少 5-7 屏并排（首页/新建习惯/详情/统计/设置）",
-    "tests": "overview/flow 形态路由 + ios_frame 硬绑定 + 信息密度分型（高密度型）+ 多屏并排"
-  },
-  {
-    "id": 5,
-    "prompt": "做一个读书笔记 App 原型",
-    "expected": "overview 平铺为主；ios_frame.jsx；读书笔记偏内容展示类，信息密度要求不如 Tracker 极端，但笔记列表页仍需 ≥ 3 层信息（书籍、引文、标签、进度）；至少 4-6 屏（首页书架/笔记详情/标注高亮/搜索/笔记本管理）；字体优先 serif display",
-    "tests": "overview 默认 + ios_frame + 信息层次 + 内容为主的视觉节奏"
-  },
-  {
-    "id": 6,
-    "prompt": "做一个跑步记录 App 原型",
-    "expected": "overview 平铺；ios_frame.jsx；跑步 App 属高密度型（地图、配速曲线、心率区间、每公里分段数据），每屏 ≥ 3 处产品差异化信息；至少 5 屏（今日总览/跑步中实时数据/路线地图/历史记录/月度统计）；避免撞 AI slop（不用紫渐变、不堆装饰 icon，但数据可视化 icon 允许保留）",
-    "tests": "overview + ios_frame + 高密度型数据可视化 + 地图/图表混排 + slop 边界条件"
+    "name": "Habit Tracker 앱 원형",
+    "prompt": "Habit Tracker iOS 앱 프로토타입을 만들어줘.",
+    "expected": "overview 또는 flow demo 중 적합한 형태를 선택하고, ios_frame.jsx를 사용한다. 홈/새 습관/통계/상세/설정 등 5개 이상 화면과 실제 클릭 흐름을 포함한다.",
+    "tests": "프로토타입 형태 선택 + iOS 프레임 + 정보 밀도 + 멀티스크린/클릭 검증"
   }
 ]

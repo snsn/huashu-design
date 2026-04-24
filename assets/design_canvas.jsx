@@ -1,27 +1,27 @@
 /**
- * DesignCanvas — 变体并排网格布局
+ * DesignCanvas — 변형안 병렬 그리드 레이아웃
  *
- * 用于展示2+个静态设计variations让用户对比选择。
- * 每个variation有label，可hover放大。
+ * 2개 이상의 정적 디자인 변형을 나란히 보여주고 선택하게 합니다.
+ * 각 variation은 label을 가지며 hover로 확대됩니다.
  *
- * 用法：
+ * 사용법:
  *   <DesignCanvas
- *     title="Hero区设计探索"
- *     subtitle="3个方向对比"
+ *     title="Hero 영역 디자인 탐색"
+ *     subtitle="3가지 방향 비교"
  *     columns={3}
  *   >
- *     <Variation label="Minimal" description="极简克制版">
- *       <div>...你的设计1...</div>
+ *     <Variation label="Minimal" description="절제된 미니멀">
+ *       <div>...your design 1...</div>
  *     </Variation>
- *     <Variation label="Editorial" description="杂志编辑风">
- *       <div>...你的设计2...</div>
+ *     <Variation label="Editorial" description="매거진 에디토리얼">
+ *       <div>...your design 2...</div>
  *     </Variation>
- *     <Variation label="Brutalist" description="粗粝原始">
- *       <div>...你的设计3...</div>
+ *     <Variation label="Brutalist" description="거친 브루탈">
+ *       <div>...your design 3...</div>
  *     </Variation>
  *   </DesignCanvas>
  *
- * 配合React+Babel使用。放在合适的script里，然后window.DesignCanvas/window.Variation可用。
+ * Use with React+Babel. Load it in the appropriate script block, then access window.DesignCanvas/window.Variation.
  */
 
 const canvasStyles = {

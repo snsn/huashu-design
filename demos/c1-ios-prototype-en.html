@@ -2,11 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>huashu-design V2 · c1-ios-prototype · EN</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Noto+Serif+SC:wght@300;400;500;600&family=Inter:wght@100;200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
+<title>huashu-design V2 · c1-ios-prototype · EN</title><style>
   :root {
     --bg: #000000;
     --ink: #FFFFFF;
@@ -23,8 +19,8 @@
     --cd-green: #2D4A3A;
 
     --serif-en: "Source Serif 4", Georgia, serif;
-    --serif-cn: "Noto Serif SC", "Songti SC", serif;
-    --sans: "Inter", -apple-system, "PingFang SC", sans-serif;
+    --serif-cn: "Noto Serif KR", "Songti SC", serif;
+    --sans: "Inter", -apple-system, "Apple SD Gothic Neo", sans-serif;
     --mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
   }
   html, body {
@@ -276,7 +272,7 @@
   .wire .g4 { height: 20px; width: 50%; }
   .wire .g5 { height: 52px; margin-top: 24px; }
 
-  /* 2. Home screen — 主屏 · pomodoro */
+  /* 2. Home screen — 한국어 · pomodoro */
   .home-screen { padding: 40px 28px; color: var(--cd-ink); }
   .home-screen .kicker {
     font-family: var(--mono);
@@ -333,7 +329,7 @@
     margin-right: 10px;
   }
 
-  /* 3. Timer · 计时 · ring */
+  /* 3. Timer · 한국어 · ring */
   .timer-screen {
     padding: 40px 28px;
     color: var(--cd-ink);
@@ -407,7 +403,7 @@
     border-color: transparent;
   }
 
-  /* 4. Stats · 统计 · bar chart */
+  /* 4. Stats · 한국어 · bar chart */
   .stats-screen { padding: 40px 28px; color: var(--cd-ink); }
   .stats-screen .stats-label {
     font-family: var(--mono);
@@ -465,7 +461,7 @@
     padding: 0 4px;
   }
 
-  /* 5. Settings · 设置 · list */
+  /* 5. Settings · 한국어 · list */
   .settings-screen { padding: 40px 28px; color: var(--cd-ink); }
   .settings-screen .title-row {
     font-family: var(--serif-en);
@@ -959,7 +955,7 @@
   const schedule = [
     { t: 2.0, view: 'wire',     tabIco: null,       tap: null },
     { t: 3.1, view: 'home',     tabIco: 'home',     tap: null },                 // home materializes (no tap — it's the fill moment)
-    { t: 4.4, view: 'timer',    tabIco: 'timer',    tap: {x: 208, y: 624} },     // tap "开始专注" CTA
+    { t: 4.4, view: 'timer',    tabIco: 'timer',    tap: {x: 208, y: 624} },     // tap "한국어" CTA
     { t: 6.3, view: 'stats',    tabIco: 'stats',    tap: {x: 300, y: 810} },     // tap stats tab
     { t: 7.5, view: 'settings', tabIco: 'settings', tap: {x: 370, y: 810} },     // tap settings tab
   ];

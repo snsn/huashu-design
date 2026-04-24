@@ -1,39 +1,49 @@
 #!/usr/bin/env node
 /**
- * export_deck_pdf.mjs — 把多文件 slide deck 导出为单个矢量 PDF
+ * export_deck_pdf.mjs — 여러 파일 slide deck을 하나의 벡터 PDF로 내보냅니다
  *
- * 用法：
+ * 사용법:
  *   node export_deck_pdf.mjs --slides <dir> --out <file.pdf> [--width 1920] [--height 1080]
  *
- * 特点：
- *   - 文字保留矢量（可复制、可搜索）
- *   - 背景/图形 1:1 保真（Playwright 内嵌 Chromium 渲染）
- *   - 不需要对 HTML 做任何改造
- *   - 视觉损失 = 0（PDF 就是浏览器打印出来的）
+ * 특징:
+ *   - 텍스트를 벡터로 유지(복사/검색 가능)
+ *   - 배경/그래픽을 1:1로 보존(Playwright 내장 Chromium 렌더링)
+ *   - HTML 수정 불필요
+ *   - 시각 손실 최소화(PDF는 브라우저 출력물)
  *
  * trade-off：
- *   - PDF 不可再编辑文字（要改回到 HTML 改）
+ *   - PDF 텍스트는 직접 편집하지 않고 HTML 원본을 수정
  *
- * 依赖：playwright pdf-lib
+ * 필요 조건:playwright pdf-lib
  *   npm install playwright pdf-lib
  *
- * 会按文件名排序（01-xxx.html → 02-xxx.html → ...）
+ * 파일명 기준 정렬（01-xxx.html → 02-xxx.html → ...）
  */
 
-import { chromium } from 'playwright';
-import { PDFDocument } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 
+function printUsage() {
+  console.log('사용법: node export_deck_pdf.mjs --slides <dir> --out <file.pdf> [--width 1920] [--height 1080]');
+}
+
 function parseArgs() {
+  if (process.argv.includes('--help') || process.argv.includes('-h')) {
+    console.log('사용법: node export_deck_pdf.mjs --slides <dir> --out <file.pdf> [--width 1920] [--height 1080]');
+    process.exit(0);
+  }
   const args = { width: 1920, height: 1080 };
   const a = process.argv.slice(2);
+  if (a.includes('--help') || a.includes('-h')) {
+    printUsage();
+    process.exit(0);
+  }
   for (let i = 0; i < a.length; i += 2) {
     const k = a[i].replace(/^--/, '');
     args[k] = a[i + 1];
   }
   if (!args.slides || !args.out) {
-    console.error('用法: node export_deck_pdf.mjs --slides <dir> --out <file.pdf> [--width 1920] [--height 1080]');
+    printUsage();
     process.exit(1);
   }
   args.width = parseInt(args.width);
@@ -41,8 +51,21 @@ function parseArgs() {
   return args;
 }
 
+async function importDependency(name) {
+  try {
+    return await import(name);
+  } catch (error) {
+    console.error(`오류: ${name} 모듈을 찾을 수 없습니다.`);
+    console.error('설치 예: npm install playwright pdf-lib');
+    console.error(`상세: ${error.message}`);
+    process.exit(1);
+  }
+}
+
 async function main() {
   const { slides, out, width, height } = parseArgs();
+  const { chromium } = await importDependency('playwright');
+  const { PDFDocument } = await importDependency('pdf-lib');
   const slidesDir = path.resolve(slides);
   const outFile = path.resolve(out);
 

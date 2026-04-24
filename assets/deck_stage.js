@@ -1,27 +1,27 @@
 /**
- * <deck-stage> — HTML幻灯片外壳web component
+ * <deck-stage> — HTML slide deck web component.
  *
- * 提供功能：
- * - 固定尺寸canvas（默认1920×1080）+ auto-scale + letterbox
- * - 键盘导航（←/→/Space/Home/End/Esc）
- * - 左右点击区域导航
- * - slide counter (当前/总数)
- * - localStorage持久化当前slide
- * - Speaker notes postMessage (支持外层渲染)
- * - Hash导航 (#slide-5 跳到第5张)
- * - Print-to-PDF支持 (Cmd+P / Ctrl+P 一页一slide)
- * - 自动给每个slide添加 data-screen-label
+ * 제공 기능:
+ * - 고정 크기 canvas(기본 1920×1080) + auto-scale + letterbox
+ * - 키보드 내비게이션(←/→/Space/Home/End/Esc)
+ * - 좌우 클릭 영역 내비게이션
+ * - slide counter(현재/전체)
+ * - localStorage로 현재 slide 유지
+ * - Speaker notes postMessage(외부 렌더링 지원)
+ * - Hash 내비게이션(#slide-5로 5번째 이동)
+ * - Print-to-PDF 지원(Cmd+P / Ctrl+P, slide별 페이지)
+ * - 각 slide에 data-screen-label 자동 추가
  *
- * 用法：
+ * 사용법:
  *   <deck-stage>
  *     <section>Slide 1</section>
  *     <section>Slide 2</section>
  *   </deck-stage>
  *
- * 自定义尺寸：
+ * 사용자 지정 크기:
  *   <deck-stage width="1080" height="1920">...</deck-stage>
  *
- * Speaker notes：在<head>加
+ * Speaker notes: <head>에 추가
  *   <script type="application/json" id="speaker-notes">
  *   ["slide 1 notes", "slide 2 notes"]
  *   </script>
@@ -43,12 +43,12 @@
       this._width = parseInt(this.getAttribute('width')) || 1920;
       this._height = parseInt(this.getAttribute('height')) || 1080;
 
-      // Shadow DOM 先渲染（独立于子节点，不受 parser 时机影响）
+      // Render shadow DOM before collecting slotted sections
       this._render();
 
-      // 防御：若 script 放在 <head> 里（而非 </deck-stage> 之后），
-      // parser 此刻可能还没处理完子 <section>，querySelectorAll 会返回空。
-      // 延迟到下一个事件循环，确保子节点都已 parse 完毕。
+      // Defensive path for scripts placed in head instead of after deck-stage
+      // Parser may not have produced section children yet.
+      // Delay init until children are parsed.
       const init = () => {
         this._collectSlides();
         this._setupEventListeners();
@@ -58,16 +58,16 @@
       };
 
       if (this.ownerDocument.readyState === 'loading') {
-        // 文档还在 parse，等 DOMContentLoaded 一次搞定所有 section
+        // Document still parsing; wait for DOMContentLoaded to collect sections
         this.ownerDocument.addEventListener('DOMContentLoaded', init, { once: true });
       } else {
-        // 文档已 parse 完（script 在 body 底部或 defer），下一帧收集即可
+        // Document parsed; collect on next frame
         requestAnimationFrame(init);
       }
     }
 
     _render() {
-      this.shadowRoot.innerHTML = `
+      const shadowDoc = new DOMParser().parseFromString(`
         <style>
           :host {
             display: block;
@@ -75,38 +75,105 @@
             inset: 0;
             background: #000;
             overflow: hidden;
-            font-family: -apple-system, 'SF Pro Text', 'PingFang SC', sans-serif;
+            font-family: -apple-system, 'SF Pro Text', 'Apple SD Gothic Neo', sans-serif;
           }
 
-          :host([noscale]) .stage {
-            transform: none !important;
-            top: 0 !important;
-            left: 0 !important;
-          }
+        :host([noscale]) .stage {
+          transform: none !important;
+          top: 0 !important;
+          left: 0 !important;
+        }
 
-          .stage {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform-origin: top left;
-            will-change: transform;
-            background: #fff;
-          }
+        .stage {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform-origin: top left;
+          will-change: transform;
+          background: #fff;
+        }
 
-          .slide-wrapper {
-            width: 100%;
-            height: 100%;
-            position: relative;
-          }
+        .slide-wrapper {
+          width: 100%;
+          height: 100%;
+          position: relative;
+        }
 
+        ::slotted(section) {
+          display: none;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          overflow: hidden;
+        }
+
+        ::slotted(section.active) {
+          display: block;
+        }
+
+        .counter {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          background: rgba(0, 0, 0, 0.6);
+          color: #fff;
+          padding: 6px 14px;
+          border-radius: 999px;
+          font-size: 13px;
+          font-variant-numeric: tabular-nums;
+          z-index: 100;
+          user-select: none;
+          opacity: 0.6;
+          transition: opacity 0.2s;
+        }
+
+        .counter:hover { opacity: 1; }
+
+        .nav-zone {
+          position: fixed;
+          top: 0;
+          bottom: 0;
+          width: 15%;
+          cursor: pointer;
+          z-index: 50;
+        }
+
+        .nav-zone.left { left: 0; }
+        .nav-zone.right { right: 0; }
+
+        .nav-hint {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 44px;
+          height: 44px;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.1);
+          color: rgba(255, 255, 255, 0.6);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 24px;
+          opacity: 0;
+          transition: opacity 0.2s;
+        }
+
+        .nav-zone.left .nav-hint { left: 20px; }
+        .nav-zone.right .nav-hint { right: 20px; }
+        .nav-zone:hover .nav-hint { opacity: 1; }
+
+        @media print {
+          :host { position: static; background: #fff; }
+          .counter, .nav-zone { display: none !important; }
+          .stage { position: static; transform: none !important; page-break-after: always; }
           ::slotted(section) {
-            display: none;
+            display: block !important;
+            position: relative !important;
+            page-break-after: always;
             width: 100%;
             height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            overflow: hidden;
           }
 
           ::slotted(section.active) {
@@ -206,7 +273,8 @@
         </div>
 
         <div class="counter" id="counter">1 / 1</div>
-      `;
+      `, 'text/html');
+      this.shadowRoot.replaceChildren(...shadowDoc.head.childNodes, ...shadowDoc.body.childNodes);
     }
 
     _collectSlides() {

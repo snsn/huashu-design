@@ -2,11 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>w2 · Rough draft now beats perfect draft later</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Noto+Serif+SC:wght@200;300;400;500;600&family=Inter:wght@100;200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
+<title>w2 · Rough draft now beats perfect draft later</title><style>
   :root {
     --bg: #000000;
     --ink: #FFFFFF;
@@ -17,16 +13,16 @@
     --hairline: rgba(255,255,255,0.12);
     --accent: #D97757;
     --accent-deep: #B85D3D;
-    --bad: #6E3A2E;           /* 失败暗红调，不刺眼 */
-    --bad-strong: #C85A42;    /* 失败叉号强调，对比度提升 */
-    --cool: rgba(255,255,255,0.42); /* 冷色参考线（左路径） */
+    --bad: #6E3A2E;           /* 한국어，한국어 */
+    --bad-strong: #C85A42;    /* 한국어，한국어 */
+    --cool: rgba(255,255,255,0.42); /* 한국어（한국어） */
     --cd-bg: #F5F4F0;
     --cd-panel: #FFFFFF;
     --cd-ink: #1A1918;
 
-    --serif-zh: "Noto Serif SC", "Songti SC", serif;
+    --serif-zh: "Noto Serif KR", "Songti SC", serif;
     --serif-en: "Source Serif 4", "Tiempos Headline", Georgia, serif;
-    --sans: "Inter", -apple-system, "PingFang SC", "HarmonyOS Sans SC", system-ui, sans-serif;
+    --sans: "Inter", -apple-system, "Apple SD Gothic Neo", "HarmonyOS Sans SC", system-ui, sans-serif;
     --mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
   }
   html, body {
@@ -130,7 +126,7 @@
   }
 
   /* ======================================================
-   * TOP HALF · 闷头一把梭（3 hours, all at once）
+   * TOP HALF · 한국어（3 hours, all at once）
    * ====================================================== */
   .half-top {
     position: absolute;
@@ -286,7 +282,7 @@
   }
 
   /* ======================================================
-   * BOTTOM HALF · 尽早 show（small iterations）
+   * BOTTOM HALF · 한국어 show（small iterations）
    * ====================================================== */
   .half-bot {
     position: absolute;
@@ -512,7 +508,7 @@
   }
 
   /* ======================================================
-   * BRAND REVEAL — 统一动作
+   * BRAND REVEAL — 한국어
    * ====================================================== */
   .brand-sheet {
     position: absolute;
@@ -745,12 +741,12 @@
   // 0.6-1.4    two half-labels fade in (top first, then bot)
   // 1.4-2.0    top terminal line 1 types; bot panel 1 enters
   //
-  // Top track (闷头):
+  // Top track (한국어):
   //   2.0-7.8  progress bar crawls from 0 to 99% (slow, painful)
   //   7.8-8.4  stuck at 99%
   //   8.4-8.9  fail stamp lands + bar turns red + bar drops to 0
   //
-  // Bottom track (尽早):
+  // Bottom track (한국어):
   //   2.0-2.6  iter1 enters, nod1 appears @ 2.8
   //   3.6-4.2  iter2 enters, nod2 appears @ 4.4
   //   5.6-6.2  iter3 enters, nod3 appears @ 6.4 (final tick — biggest)

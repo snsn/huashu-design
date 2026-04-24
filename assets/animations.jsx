@@ -1,17 +1,17 @@
 /**
- * animations.jsx — 时间轴动画引擎
+ * animations.jsx — 타임라인 애니메이션 엔진
  *
- * Stage + Sprite 模式，借鉴Remotion但轻量化。
+ * Stage + Sprite 패턴. Remotion에서 아이디어를 빌리되 더 가볍게 유지합니다.
  *
- * 导出（挂到 window.Animations）：
- * - Stage: 整个动画容器，提供时间+控制
- * - Sprite: 时间片段，start/end内显示，提供本地进度
- * - useTime(): 读全局时间（秒）
- * - useSprite(): 读本地进度 {t: 0→1, elapsed: seconds, duration: seconds}
+ * 내보내기(window.Animations에 연결):
+ * - Stage: 전체 애니메이션 컨테이너, 시간과 제어 제공
+ * - Sprite: 시간 조각. start/end 사이에서 표시되고 로컬 진행률 제공
+ * - useTime(): 전역 시간(초)을 읽음
+ * - useSprite(): 로컬 진행률 읽기 {t: 0→1, elapsed: seconds, duration: seconds}
  * - Easing: {linear, easeIn, easeOut, easeInOut, spring, anticipation}
  * - interpolate(t, [input0, input1], [output0, output1], easing?)
  *
- * 用法：
+ * 사용법:
  *   <Stage duration={10}>
  *     <Sprite start={0} end={3}>
  *       <Title />
@@ -21,7 +21,7 @@
  *     </Sprite>
  *   </Stage>
  *
- * 在Sprite子组件里用 useSprite() 读当前片段进度。
+ * Sprite 자식 컴포넌트에서 useSprite()로 현재 구간 진행률을 읽습니다.
  */
 
 (function() {
@@ -35,10 +35,10 @@
     easeIn: t => t * t,
     easeOut: t => 1 - (1 - t) * (1 - t),
     easeInOut: t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2,
-    // expoOut: Anthropic-level 主 easing (cubic-bezier(0.16, 1, 0.3, 1))
-    // 迅速启动 + 缓慢刹车，给数字元素物理重量感
+    // expoOut: primary easing (cubic-bezier(0.16, 1, 0.3, 1))
+    // Fast start with a slow settle for physical weight.
     expoOut: t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t),
-    // overshoot: 带弹性的 toggle/按钮弹出 (cubic-bezier(0.34, 1.56, 0.64, 1))
+    // overshoot: elastic toggle/button entrance.
     overshoot: t => {
       const c1 = 1.70158, c3 = c1 + 1;
       return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
@@ -280,14 +280,14 @@
               style={stageStyles.button}
               onClick={() => setPlaying(p => !p)}
             >
-              {playing ? '⏸ 暂停' : '▶ 播放'}
+              {playing ? '⏸ 일시정지' : '▶ 재생'}
             </button>
 
             <button
               style={stageStyles.button}
               onClick={() => setTime(0)}
             >
-              ⏮ 开始
+              ⏮ 처음
             </button>
 
             <div style={stageStyles.timeDisplay}>

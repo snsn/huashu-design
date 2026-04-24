@@ -1,11 +1,10 @@
-<sub><b>🌐 English</b> · <a href="README.md">中文</a></sub>
+<sub><a href="README.md">한국어</a> · <b>🌐 English</b></sub>
 
 <div align="center">
 
 # Huashu Design
 
 > *"Type. Hit enter. A finished design lands in your lap."*
-> *「打字。回车。一份能交付的设计。」*
 
 [![License](https://img.shields.io/badge/License-Personal%20Use%20Only-orange.svg)](LICENSE)
 [![Agent-Agnostic](https://img.shields.io/badge/Agent-Agnostic-blueviolet)](https://skills.sh)
@@ -29,7 +28,7 @@ npx skills add alchaincyf/huashu-design
 
 [See it work](#demo-gallery) · [Install](#install) · [What it does](#what-it-does) · [How it works](#core-mechanics) · [vs. Claude Design](#vs-claude-design)
 
-> 📖 **Note for English readers**: this skill is built by a Chinese-speaking developer. The skill's agent prompts (`SKILL.md`, `references/*.md`) are in Chinese but the agent is bilingual — works fine with English tasks. The demos below are the English parallel versions; the Chinese ones are in the default-named files (see the Chinese [README.md](README.md)).
+> 📖 **Note for English readers**: this fork is Korean-first. Core agent prompts and runtime help are maintained primarily in Korean, with English demos retained for compatibility.
 
 </div>
 
@@ -48,23 +47,37 @@ npx skills add alchaincyf/huashu-design
 ## Install
 
 ```bash
-npx skills add alchaincyf/huashu-design
+mkdir -p ~/.codex/skills
+cp -R huashu-design ~/.codex/skills/huashu-design
 ```
 
-Then just talk to Claude Code:
+## Capabilities
 
+| Capability | Output | Smoke check |
+| --- | --- | --- |
+| App/Web prototype | Single-file HTML with device/browser frames | `python scripts/verify.py demos/c1-ios-prototype.html` |
+| Slide deck | HTML deck, PDF, editable PPTX | `node scripts/export_deck_pdf.mjs --help` |
+| Motion design | Timeline HTML, MP4/GIF export | `node scripts/render-video.js --help` |
+| Design variations | Side-by-side options and Tweaks controls | Browser smoke test |
+| Infographic | Print-ready visual layout | Playwright screenshot |
+| Expert review | Radar chart and actionable fixes | Console check |
+
+## Repository layout
+
+```text
+SKILL.md       Korean-first agent instructions
+assets/        reusable frames, deck shell, animation starter
+demos/         representative examples
+references/    task-specific design notes
+scripts/       verification and export utilities
+docs/          localization and security audit artifacts
 ```
-"Make a keynote for AI psychology. Give me 3 style directions to pick from."
-"Build an iOS prototype for a Pomodoro app — 4 screens, actually clickable."
-"Turn this logic into a 60-second animation. Export MP4 and GIF."
-"Run a 5-dimension expert review on this design."
-```
 
-No buttons, no panels, no Figma plugin. Agent-agnostic — drops into Claude Code, Cursor, Trae, Hermes, OpenClaw, or any markdown-skill-capable agent.
+## Security posture
 
----
+Remote fonts and CDN scripts are minimized. Dynamic DOM writes use safer element APIs where possible. The video export path still invokes ffmpeg through Node child process APIs, but arguments are fixed as an array and user inputs are validated before execution. See `docs/security-audit.md` for current residual risk.
 
-## Star History
+## License
 
 <p align="center">
   <a href="https://star-history.com/#alchaincyf/huashu-design&Date">
@@ -90,7 +103,7 @@ No buttons, no panels, no Figma plugin. Agent-agnostic — drops into Claude Cod
 
 ## Demo Gallery
 
-> English parallel versions of the demos. Chinese versions live at the default filenames (see the Chinese README).
+> English parallel versions of the demos. Korean-first defaults live in [README.md](README.md) and the core skill files.
 
 ### Design Direction Advisor
 
@@ -301,10 +314,7 @@ Huasheng is an AI-native coder, independent developer, and AI content creator. N
 | Platform | Handle | Link |
 |---|---|---|
 | X / Twitter | @AlchainHust | https://x.com/AlchainHust |
-| WeChat Official Account | 花叔 | Search "花叔" in WeChat |
-| Bilibili | 花叔 | https://space.bilibili.com/14097567 |
-| YouTube | 花叔 | https://www.youtube.com/@Alchain |
-| Xiaohongshu | 花叔 | https://www.xiaohongshu.com/user/profile/5abc6f17e8ac2b109179dfdf |
+| YouTube | Huashu | https://www.youtube.com/@Alchain |
 | Official Site | huasheng.ai | https://www.huasheng.ai/ |
 | Developer Hub | bookai.top | https://bookai.top |
 

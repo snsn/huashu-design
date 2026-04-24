@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 /**
- * HTML animation → MP4 via Playwright recordVideo + ffmpeg.
+ * HTML 애니메이션을 Playwright recordVideo와 ffmpeg로 MP4 변환.
  *
- * Requires: global playwright (`npm install -g playwright`), ffmpeg on PATH.
+ * 필요 조건: 전역 playwright(`npm install -g playwright`)와 PATH의 ffmpeg.
  *
- * Usage:
+ * 사용법:
  *   NODE_PATH=$(npm root -g) node render-video.js <html-file> \
  *     [--duration=30] [--width=1920] [--height=1080] \
  *     [--trim=<seconds>] [--fontwait=1.5] [--readytimeout=8] \
  *     [--keep-chrome]
  *
- * Design:
+ * 설계:
  *   1. Warmup context (no record) — caches fonts/assets, closes cleanly
  *   2. Record context (fresh, recordVideo ON) — WebM starts writing at
  *      context creation. Babel-standalone compile + React mount +
@@ -34,13 +34,27 @@
  * Chrome elements hidden by default (all common class names + `.no-record`
  * convention). Pass --keep-chrome to disable this and see raw HTML.
  *
- * Output: next to the HTML file, same basename with .mp4 suffix.
+ * 출력: HTML 파일과 같은 디렉터리에 같은 이름의 .mp4 파일을 생성합니다.
  */
 
-const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
-const { spawnSync } = require('child_process');
+const { spawnSync } = require('node:child_process');
+
+function printUsage() {
+  console.log('사용법: node render-video.js <html-file> [--duration=30] [--width=1920] [--height=1080] [--trim=<seconds>] [--fontwait=1.5] [--readytimeout=8] [--keep-chrome]');
+  console.log('예시: NODE_PATH=$(npm root -g) node render-video.js my-animation.html');
+}
+
+function printUsage() {
+  console.log('사용법: node render-video.js <html-file> [--duration=30] [--width=1920] [--height=1080] [--trim=<seconds>] [--fontwait=1.5] [--readytimeout=8] [--keep-chrome]');
+  console.log('예시: NODE_PATH=$(npm root -g) node render-video.js my-animation.html');
+}
+
+function printUsage() {
+  console.log('사용법: node render-video.js <html-file> [--duration=30] [--width=1920] [--height=1080] [--trim=<seconds>] [--fontwait=1.5] [--readytimeout=8] [--keep-chrome]');
+  console.log('예시: NODE_PATH=$(npm root -g) node render-video.js my-animation.html');
+}
 
 function arg(name, def) {
   const p = process.argv.find(a => a.startsWith('--' + name + '='));
@@ -49,27 +63,104 @@ function arg(name, def) {
 function hasFlag(name) {
   return process.argv.includes('--' + name);
 }
+function parsePositiveNumber(name, def) {
+  const raw = arg(name, def);
+  const value = Number(raw);
+  if (!Number.isFinite(value) || value <= 0) {
+    console.error(`오류: --${name} 값은 양수여야 합니다: ${raw}`);
+    process.exit(1);
+  }
+  return value;
+}
+function parsePositiveInteger(name, def) {
+  const value = parsePositiveNumber(name, def);
+  if (!Number.isInteger(value)) {
+    console.error(`오류: --${name} 값은 정수여야 합니다: ${value}`);
+    process.exit(1);
+  }
+  return value;
+}
 
-const HTML_FILE = process.argv[2];
-if (!HTML_FILE || HTML_FILE.startsWith('--')) {
-  console.error('Usage: node render-video.js <html-file>');
-  console.error('Example: NODE_PATH=$(npm root -g) node render-video.js my-animation.html');
+function fail(message) {
+  console.error('ERROR: ' + message);
   process.exit(1);
 }
 
-const DURATION  = parseFloat(arg('duration', '30'));
-const WIDTH     = parseInt(arg('width', '1920'));
-const HEIGHT    = parseInt(arg('height', '1080'));
-const TRIM_OVERRIDE = arg('trim', null);              // manual override (seconds). If unset, auto-detected.
-const FONT_WAIT = parseFloat(arg('fontwait', '1.5')); // fallback when no __ready signal
-const READY_TIMEOUT = parseFloat(arg('readytimeout', '8'));
+function parseBoundedNumber(name, raw, { integer = false, min, max }) {
+  const value = integer ? parseInt(raw, 10) : parseFloat(raw);
+  if (!Number.isFinite(value)) fail(`${name} 값이 숫자가 아닙니다: ${raw}`);
+  if (value < min || value > max) fail(`${name} 값은 ${min}~${max} 범위여야 합니다: ${value}`);
+  return value;
+}
+
+function assertReadableHtml(file) {
+  const abs = path.resolve(file);
+  if (!fs.existsSync(abs)) fail(`HTML 파일이 없습니다: ${abs}`);
+  const stat = fs.statSync(abs);
+  if (!stat.isFile()) fail(`HTML 경로가 파일이 아닙니다: ${abs}`);
+  if (path.extname(abs).toLowerCase() !== '.html') fail(`.html 파일만 렌더링할 수 있습니다: ${abs}`);
+  return abs;
+}
+
+function printUsage() {
+  console.error('사용법: node render-video.js <html-file> [--duration=30] [--width=1920] [--height=1080]');
+  console.error('예시: NODE_PATH=$(npm root -g) node render-video.js my-animation.html');
+}
+
+if (hasFlag('help') || process.argv.includes('-h')) {
+  printUsage();
+  process.exit(0);
+}
+
+const HTML_FILE = process.argv[2];
+if (hasFlag('help') || process.argv.includes('-h')) {
+  printUsage();
+  process.exit(0);
+}
+if (!HTML_FILE || HTML_FILE.startsWith('--')) {
+  printUsage();
+  process.exit(1);
+}
+
+const DURATION = parsePositiveNumber('duration', '30');
+const WIDTH = parsePositiveInteger('width', '1920');
+const HEIGHT = parsePositiveInteger('height', '1080');
+const TRIM_OVERRIDE = arg('trim', null); // 수동 보정값(초), 없으면 자동 계산
+const FONT_WAIT = parsePositiveNumber('fontwait', '1.5');
+const READY_TIMEOUT = parsePositiveNumber('readytimeout', '8');
 const KEEP_CHROME = hasFlag('keep-chrome');
 
+if (TRIM_OVERRIDE !== null) {
+  const trim = Number(TRIM_OVERRIDE);
+  if (!Number.isFinite(trim) || trim < 0) {
+    console.error(`오류: --trim 값은 0 이상의 숫자여야 합니다: ${TRIM_OVERRIDE}`);
+    process.exit(1);
+  }
+}
+
 const HTML_ABS = path.resolve(HTML_FILE);
+if (!fs.existsSync(HTML_ABS) || !fs.statSync(HTML_ABS).isFile()) {
+  console.error(`오류: HTML 파일을 찾을 수 없습니다: ${HTML_ABS}`);
+  process.exit(1);
+}
+
+let chromium;
+try {
+  ({ chromium } = require('playwright'));
+} catch (error) {
+  console.error('오류: playwright 모듈을 찾을 수 없습니다.');
+  console.error('설치 예: npm install -g playwright && playwright install chromium');
+  console.error(`상세: ${error.message}`);
+  process.exit(1);
+}
 const BASENAME = path.basename(HTML_FILE, path.extname(HTML_FILE));
 const DIR      = path.dirname(HTML_ABS);
 const TMP_DIR  = path.join(DIR, '.video-tmp-' + Date.now() + '-' + process.pid);
 const MP4_OUT  = path.join(DIR, BASENAME + '.mp4');
+if (!path.resolve(MP4_OUT).startsWith(DIR + path.sep)) {
+  console.error('출력 경로가 입력 HTML 디렉터리 밖으로 벗어났습니다.');
+  process.exit(1);
+}
 
 // CSS to hide "chrome" elements during recording.
 // Covers class-name conventions seen across skill-built animations,
@@ -92,6 +183,7 @@ console.log(`  size: ${WIDTH}x${HEIGHT} · duration: ${DURATION}s · hide-chrome
 console.log(`  output: ${MP4_OUT}`);
 
 (async () => {
+  const { chromium } = require('playwright');
   fs.mkdirSync(TMP_DIR, { recursive: true });
 
   const browser = await chromium.launch();
@@ -204,9 +296,9 @@ console.log(`  output: ${MP4_OUT}`);
   ).then(() => true).catch(() => false);
 
   if (hasReady) {
-    // 第二道防线：主动把动画 time 归零——对付 HTML 不严格遵守 starter tick 模板
-    // 的情况（例如 lastTick 用 performance.now() 导致字体加载时间被算进首帧 dt）
-    // 详见 references/animation-pitfalls.md §12
+    // 두 번째 방어선: 애니메이션 time을 0으로 되돌려 starter tick 템플릿 불일치를 완화
+    // 예: lastTick이 performance.now()를 써서 폰트 로딩 시간이 첫 프레임 dt에 포함되는 경우
+    // 참고 references/animation-pitfalls.md §12
     const seekCorrected = await page.evaluate(() => {
       if (typeof window.__seek === 'function') {
         window.__seek(0);
@@ -215,7 +307,7 @@ console.log(`  output: ${MP4_OUT}`);
       return false;
     });
     if (seekCorrected) {
-      // 等两个 rAF 让 seek 生效并渲染出 t=0 的画面
+      // rAF 두 번을 기다려 seek가 반영되고 t=0 화면이 렌더링되게 합니다
       await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
     }
     animationStartSec = (Date.now() - T0) / 1000;
@@ -247,24 +339,29 @@ console.log(`  output: ${MP4_OUT}`);
 
   const webmFiles = fs.readdirSync(TMP_DIR).filter(f => f.endsWith('.webm'));
   if (webmFiles.length === 0) {
-    console.error('✗ No webm produced');
+    console.error('✗ WebM 파일이 생성되지 않았습니다');
     process.exit(1);
   }
   const webmPath = path.join(TMP_DIR, webmFiles[0]);
   console.log(`▸ WebM: ${(fs.statSync(webmPath).size / 1024 / 1024).toFixed(1)} MB`);
 
-  // Resolve final trim offset:
+  // 최종 trim offset 결정:
   //   - manual --trim=X       → use X (explicit user override)
   //   - hasReady              → animationStartSec + 0.05s (Babel-commit nudge)
   //   - fallback (no __ready) → animationStartSec + 0.5s safety margin (raf
   //                             loop may have started running already; without
   //                             this we'd capture mid-cycle frames)
   const resolvedTrim = TRIM_OVERRIDE !== null
-    ? parseFloat(TRIM_OVERRIDE)
+    ? parseBoundedNumber('trim', TRIM_OVERRIDE, { min: 0, max: Math.max(DURATION + 120, 120) })
     : animationStartSec + (hasReady ? 0.05 : 0.5);
 
   console.log(`▸ ffmpeg: trim=${resolvedTrim.toFixed(2)}s${TRIM_OVERRIDE !== null ? ' (manual)' : ' (auto)'}, encode H.264…`);
-  const ffmpeg = spawnSync('ffmpeg', [
+  if (!Number.isFinite(resolvedTrim) || resolvedTrim < 0) {
+    console.error(`잘못된 trim 값입니다: ${resolvedTrim}`);
+    process.exit(1);
+  }
+
+  const ffmpegArgs = [
     '-y',
     '-ss', String(resolvedTrim),
     '-i', webmPath,
@@ -275,10 +372,14 @@ console.log(`  output: ${MP4_OUT}`);
     '-preset', 'medium',
     '-movflags', '+faststart',
     MP4_OUT,
-  ], { stdio: ['ignore', 'ignore', 'pipe'] });
+  ];
+  const ffmpeg = spawnSync('ffmpeg', ffmpegArgs, {
+    cwd: DIR,
+    stdio: ['ignore', 'ignore', 'pipe'],
+  });
 
   if (ffmpeg.status !== 0) {
-    console.error('✗ ffmpeg failed:\n' + ffmpeg.stderr.toString().slice(-2000));
+    console.error('✗ ffmpeg 실패:\n' + ffmpeg.stderr.toString().slice(-2000));
     process.exit(1);
   }
 

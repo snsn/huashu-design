@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-verify.py — Playwright封装，用于验证claude-design产出的HTML
+verify.py — Playwright 기반 HTML 검증 도구
 
-Usage:
-    python verify.py path/to/design.html                    # 基础：打开+截图+抓控制台错误
-    python verify.py design.html --viewports 1920x1080,375x667  # 多viewport
-    python verify.py deck.html --slides 10                  # 幻灯片逐页截（前10张）
-    python verify.py design.html --output ./screenshots/   # 输出目录
-    python verify.py design.html --show                    # 非headless，打开真实浏览器
+사용법:
+    python verify.py path/to/design.html
+    python verify.py design.html --viewports 1920x1080,375x667
+    python verify.py deck.html --slides 10
+    python verify.py design.html --output ./screenshots/
+    python verify.py design.html --show
 
-依赖：
+필요 도구:
     pip install playwright
     playwright install chromium
 """
@@ -30,13 +30,13 @@ def verify_html(html_path, viewports=None, slides=0, output_dir=None, show=False
     try:
         from playwright.sync_api import sync_playwright
     except ImportError:
-        print("ERROR: playwright未安装。")
-        print("运行: pip install playwright && playwright install chromium")
+        print("오류: playwright가 설치되어 있지 않습니다.")
+        print("실행: pip install playwright && playwright install chromium")
         sys.exit(1)
 
     html_path = Path(html_path).resolve()
     if not html_path.exists():
-        print(f"ERROR: 文件不存在: {html_path}")
+        print(f"오류: 파일을 찾을 수 없습니다: {html_path}")
         sys.exit(1)
 
     if output_dir is None:
@@ -63,7 +63,7 @@ def verify_html(html_path, viewports=None, slides=0, output_dir=None, show=False
             page.on("console", lambda msg: console_errors.append(f"[{msg.type}] {msg.text}") if msg.type in ("error", "warning") else None)
             page.on("pageerror", lambda err: page_errors.append(str(err)))
 
-            print(f"\n→ 打开 {file_url} @ {viewport['width']}x{viewport['height']}")
+            print(f"\n→ 열기 {file_url} @ {viewport['width']}x{viewport['height']}")
             page.goto(file_url, wait_until='networkidle')
             page.wait_for_timeout(wait)
 
@@ -80,14 +80,14 @@ def verify_html(html_path, viewports=None, slides=0, output_dir=None, show=False
                 suffix = f"-{viewport['width']}x{viewport['height']}" if len(viewports) > 1 else ""
                 screenshot_path = output_dir / f"{stem}{suffix}.png"
                 page.screenshot(path=str(screenshot_path), full_page=False)
-                print(f"  ✓ 截图 → {screenshot_path.name}")
+                print(f"  ✓ 스크린샷 → {screenshot_path.name}")
 
                 full_path = output_dir / f"{stem}{suffix}-full.png"
                 page.screenshot(path=str(full_path), full_page=True)
-                print(f"  ✓ 完整页 → {full_path.name}")
+                print(f"  ✓ 전체 페이지 → {full_path.name}")
 
             if show:
-                print("  (浏览器窗口保持打开，按Enter关闭...)")
+                print("  (브라우저 창을 유지합니다. Enter를 누르면 닫습니다.)")
                 input()
 
             context.close()
@@ -95,7 +95,7 @@ def verify_html(html_path, viewports=None, slides=0, output_dir=None, show=False
         browser.close()
 
     print("\n" + "=" * 50)
-    print("验证报告")
+    print("검증 보고서")
     print("=" * 50)
 
     if page_errors:
@@ -103,38 +103,38 @@ def verify_html(html_path, viewports=None, slides=0, output_dir=None, show=False
         for e in page_errors:
             print(f"  - {e}")
     else:
-        print("\n✅ 无JavaScript错误")
+        print("\n✅ JavaScript 오류 없음")
 
     if console_errors:
-        print(f"\n⚠️  Console Errors/Warnings ({len(console_errors)}):")
+        print(f"\n⚠️  콘솔 오류/경고 ({len(console_errors)}):")
         for e in console_errors[:20]:
             print(f"  - {e}")
         if len(console_errors) > 20:
-            print(f"  ... 还有{len(console_errors) - 20}条")
+            print(f"  ... 추가 {len(console_errors) - 20}개")
     else:
-        print("✅ Console干净")
+        print("✅ 콘솔 깨끗함")
 
-    print(f"\n📸 截图保存至: {output_dir}")
+    print(f"\n📸 스크린샷 저장 위치: {output_dir}")
 
     return 0 if not page_errors else 1
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Verify HTML design outputs with Playwright",
+        description="Playwright로 HTML 디자인 결과를 검증합니다",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("html_path", help="HTML file path")
+    parser.add_argument("html_path", help="HTML 파일 경로")
     parser.add_argument("--viewports", default="1440x900",
-                        help="逗号分隔的viewport列表，格式 WxH（默认 1440x900）")
+                        help="쉼표로 구분한 뷰포트 목록, 형식 WxH(기본 1440x900)")
     parser.add_argument("--slides", type=int, default=0,
-                        help="幻灯片模式：截取前N张（需要HTML支持ArrowRight翻页）")
+                        help="슬라이드 모드: 앞 N장을 캡처(HTML이 ArrowRight 넘김을 지원해야 함)")
     parser.add_argument("--output", default=None,
-                        help="输出目录（默认HTML所在目录的screenshots/）")
+                        help="출력 디렉터리(기본값: HTML 파일 위치의 screenshots/)")
     parser.add_argument("--show", action="store_true",
-                        help="非headless，打开真实浏览器窗口")
+                        help="headless를 끄고 실제 브라우저 창 열기")
     parser.add_argument("--wait", type=int, default=2000,
-                        help="打开页面后等待的毫秒数（默认2000）")
+                        help="페이지를 연 뒤 기다릴 밀리초(기본 2000)")
 
     args = parser.parse_args()
 

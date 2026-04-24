@@ -1,12 +1,8 @@
 <!doctype html>
-<html lang="zh-Hans">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>c5-infographic · 数据 → 印刷级排版（中文版）</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Noto+Serif+SC:wght@300;400;500;600&family=Inter:wght@100;200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
+<title>c5-infographic · Data → Typography (EN)</title><style>
   :root {
     --bg: #000000;
     --ink: #FFFFFF;
@@ -25,8 +21,8 @@
     --cd-dim: #8B867E;
 
     --serif-en: "Source Serif 4", "Tiempos Headline", Georgia, serif;
-    --serif-cn: "Noto Serif SC", "Songti SC", "Source Han Serif SC", serif;
-    --sans: "Inter", -apple-system, "PingFang SC", system-ui, sans-serif;
+    --serif-cn: "Noto Serif KR", "Songti SC", "Noto Serif KR SC", serif;
+    --sans: "Inter", -apple-system, "Apple SD Gothic Neo", system-ui, sans-serif;
     --mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
   }
 
@@ -164,24 +160,26 @@
   }
   .ig-masthead .issue .orange { color: var(--accent); }
   .ig-masthead .dept {
-    font-family: var(--serif-cn);
-    font-weight: 300;
-    font-size: 14px;
-    letter-spacing: 0.35em;
+    font-family: var(--mono);
+    font-weight: 400;
+    font-size: 10px;
+    letter-spacing: 0.3em;
     color: var(--ink-60);
+    text-transform: uppercase;
   }
 
   .ig-display {
-    font-family: var(--serif-cn);
-    font-weight: 400;
-    font-size: 84px;
-    line-height: 1.02;
-    letter-spacing: -0.01em;
+    font-family: var(--serif-en);
+    font-weight: 300;
+    font-size: 96px;
+    line-height: 1.0;
+    letter-spacing: -0.025em;
     color: var(--ink);
     margin-bottom: 6px;
     opacity: 0;
     will-change: opacity, transform;
     text-wrap: pretty;
+    font-feature-settings: "liga" 1, "dlig" 1, "kern" 1;
   }
   .ig-display .en {
     font-family: var(--serif-en);
@@ -219,12 +217,13 @@
   }
   .ig-cell.accent { border-top-color: var(--accent); }
   .ig-cell .label {
-    font-family: var(--serif-cn);
-    font-size: 12px;
-    font-weight: 300;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
     color: var(--muted);
-    letter-spacing: 0.22em;
+    letter-spacing: 0.26em;
     margin-bottom: 14px;
+    text-transform: uppercase;
   }
   .ig-cell .label .en {
     font-family: var(--mono);
@@ -271,11 +270,11 @@
     will-change: opacity;
   }
   .ig-bars .row-label {
-    font-family: var(--serif-cn);
-    font-size: 15px;
+    font-family: var(--serif-en);
+    font-size: 16px;
     font-weight: 400;
     color: var(--ink-80);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.005em;
   }
   .ig-bars .row-label.highlight { color: var(--accent); font-weight: 500; }
   .ig-bars .row-bar {
@@ -432,7 +431,7 @@
 
   <!-- Left: JSON data -->
   <div class="split-left" id="splitLeft" style="opacity:0">
-    <div class="json-label" id="jsonLabel">DATA · benchmarks.json</div>
+    <div class="json-label" id="jsonLabel">DATA &#8594; benchmarks.json</div>
     <pre class="json-block" id="jsonBlock"></pre>
   </div>
 
@@ -443,13 +442,13 @@
   <div class="infographic" id="infographic">
 
     <div class="ig-masthead" id="igMasthead">
-      <div class="issue">Issue № 05 · <span class="orange">AI Benchmarks</span> · Q2 2026</div>
-      <div class="dept">性 能 报 告</div>
+      <div class="issue">Issue &#8470; 05 <span class="orange">&#183; AI Benchmarks</span> &#183; Q2 2026</div>
+      <div class="dept">FRONTIER REPORT</div>
     </div>
 
     <h1 class="ig-display" id="igDisplay">
-      大模型<br>
-      <span class="en">benchmarks</span> 之年
+      The Age of<br>
+      <span class="en">benchmarks</span>.
     </h1>
 
     <p class="ig-deck" id="igDeck">
@@ -458,9 +457,9 @@
 
     <div class="ig-grid" id="igGrid">
       <div class="ig-cell accent" data-cell="0">
-        <div class="label">领跑模型 <span class="en">· leader</span></div>
+        <div class="label">Leader <span class="en">&#183; Q2</span></div>
         <div class="big">Claude 4.7</div>
-        <div class="sub">Sonnet, 1M ctx · Anthropic</div>
+        <div class="sub">Sonnet, 1M ctx &#183; Anthropic</div>
       </div>
       <div class="ig-cell" data-cell="1">
         <div class="label"><span class="en">SWE-bench</span></div>
@@ -473,9 +472,9 @@
         <div class="sub">diamond, graduate science</div>
       </div>
       <div class="ig-cell" data-cell="3">
-        <div class="label">价差 <span class="en">· price</span></div>
+        <div class="label">Price <span class="en">&#183; input</span></div>
         <div class="big">$3<span class="unit">/M</span></div>
-        <div class="sub">input token, typical</div>
+        <div class="sub">per million tokens, typical</div>
       </div>
     </div>
 
@@ -502,9 +501,9 @@
     </div>
 
     <div class="ig-footer" id="igFooter">
-      <span>Set in Noto Serif SC &amp; Source Serif 4</span>
+      <span>Set in Source Serif 4 &amp; JetBrains Mono</span>
       <span class="folio">P. 05</span>
-      <span>Data · 2026 Q2, public benchmarks</span>
+      <span>Data &#183; 2026 Q2, public benchmarks</span>
     </div>
 
   </div>
@@ -522,7 +521,7 @@
   <div class="brand-wall" id="brandWall">
     <div class="brand-wordmark" id="brandWord">huashu<span class="dot">·</span>design</div>
     <div class="brand-underline" id="brandLine"></div>
-    <div class="brand-cn" id="brandCn">数 据 · 印 刷 级 排 版</div>
+    <div class="brand-cn" id="brandCn">D A T A &#183; T Y P O G R A P H Y</div>
   </div>
 
 </div>
@@ -593,14 +592,34 @@
     '}'
   ];
 
-  function formatJson(lines) {
-    return lines.map(line => {
-      return line
-        .replace(/"([a-zA-Z_]+)":/g, '<span class="k">"$1"</span>:')
-        .replace(/: "([^"]+)"/g, ': <span class="s">"$1"</span>')
-        .replace(/: ([0-9.]+)/g, ': <span class="n">$1</span>')
-        .replace(/([{}\[\],])/g, '<span class="p">$1</span>');
-    }).join('\n');
+  function appendToken(parent, className, text) {
+    const span = document.createElement('span');
+    span.className = className;
+    span.textContent = text;
+    parent.appendChild(span);
+  }
+
+  function formatJsonFragment(lines) {
+    const frag = document.createDocumentFragment();
+    const tokenRe = /"([a-zA-Z_]+)"(?=\s*:)|"([^"]*)"|([0-9.]+)|([{}\[\],:])/g;
+
+    lines.forEach((line, lineIndex) => {
+      let last = 0;
+      for (const match of line.matchAll(tokenRe)) {
+        if (match.index > last) {
+          frag.appendChild(document.createTextNode(line.slice(last, match.index)));
+        }
+        if (match[1]) appendToken(frag, 'k', `"${match[1]}"`);
+        else if (match[2]) appendToken(frag, 's', `"${match[2]}"`);
+        else if (match[3]) appendToken(frag, 'n', match[3]);
+        else appendToken(frag, 'p', match[4]);
+        last = match.index + match[0].length;
+      }
+      if (last < line.length) frag.appendChild(document.createTextNode(line.slice(last)));
+      if (lineIndex < lines.length - 1) frag.appendChild(document.createTextNode('\n'));
+    });
+
+    return frag;
   }
 
   // ---------- Timeline ----------
@@ -638,7 +657,7 @@
       const k = seg(t, 0.3, 1.9);
       const linesShown = Math.floor(k * totalLines);
       const shown = jsonRaw.slice(0, Math.max(0, linesShown));
-      jsonBlock.innerHTML = formatJson(shown);
+      jsonBlock.replaceChildren(formatJsonFragment(shown));
       if (linesShown >= 3 && t < 1.9) fireOnce('datain');
     }
 
@@ -767,7 +786,7 @@
           // Reset
           startTime = null;
           sfxFired.clear();
-          jsonBlock.innerHTML = '';
+          jsonBlock.replaceChildren();
           splitLeft.style.opacity = '0';
           pipe.style.opacity = '0';
           infographic.style.opacity = '0';

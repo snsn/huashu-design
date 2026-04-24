@@ -2,11 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>c5-infographic · Data → Typography (EN)</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Noto+Serif+SC:wght@300;400;500;600&family=Inter:wght@100;200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
+<title>c5-infographic · Data → Typography (EN)</title><style>
   :root {
     --bg: #000000;
     --ink: #FFFFFF;
@@ -25,8 +21,8 @@
     --cd-dim: #8B867E;
 
     --serif-en: "Source Serif 4", "Tiempos Headline", Georgia, serif;
-    --serif-cn: "Noto Serif SC", "Songti SC", "Source Han Serif SC", serif;
-    --sans: "Inter", -apple-system, "PingFang SC", system-ui, sans-serif;
+    --serif-cn: "Noto Serif KR", "Songti SC", "Noto Serif KR SC", serif;
+    --sans: "Inter", -apple-system, "Apple SD Gothic Neo", system-ui, sans-serif;
     --mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
   }
 
@@ -596,14 +592,34 @@
     '}'
   ];
 
-  function formatJson(lines) {
-    return lines.map(line => {
-      return line
-        .replace(/"([a-zA-Z_]+)":/g, '<span class="k">"$1"</span>:')
-        .replace(/: "([^"]+)"/g, ': <span class="s">"$1"</span>')
-        .replace(/: ([0-9.]+)/g, ': <span class="n">$1</span>')
-        .replace(/([{}\[\],])/g, '<span class="p">$1</span>');
-    }).join('\n');
+  function appendToken(parent, className, text) {
+    const span = document.createElement('span');
+    span.className = className;
+    span.textContent = text;
+    parent.appendChild(span);
+  }
+
+  function formatJsonFragment(lines) {
+    const frag = document.createDocumentFragment();
+    const tokenRe = /"([a-zA-Z_]+)"(?=\s*:)|"([^"]*)"|([0-9.]+)|([{}\[\],:])/g;
+
+    lines.forEach((line, lineIndex) => {
+      let last = 0;
+      for (const match of line.matchAll(tokenRe)) {
+        if (match.index > last) {
+          frag.appendChild(document.createTextNode(line.slice(last, match.index)));
+        }
+        if (match[1]) appendToken(frag, 'k', `"${match[1]}"`);
+        else if (match[2]) appendToken(frag, 's', `"${match[2]}"`);
+        else if (match[3]) appendToken(frag, 'n', match[3]);
+        else appendToken(frag, 'p', match[4]);
+        last = match.index + match[0].length;
+      }
+      if (last < line.length) frag.appendChild(document.createTextNode(line.slice(last)));
+      if (lineIndex < lines.length - 1) frag.appendChild(document.createTextNode('\n'));
+    });
+
+    return frag;
   }
 
   // ---------- Timeline ----------
@@ -641,7 +657,7 @@
       const k = seg(t, 0.3, 1.9);
       const linesShown = Math.floor(k * totalLines);
       const shown = jsonRaw.slice(0, Math.max(0, linesShown));
-      jsonBlock.innerHTML = formatJson(shown);
+      jsonBlock.replaceChildren(formatJsonFragment(shown));
       if (linesShown >= 3 && t < 1.9) fireOnce('datain');
     }
 
@@ -770,7 +786,7 @@
           // Reset
           startTime = null;
           sfxFired.clear();
-          jsonBlock.innerHTML = '';
+          jsonBlock.replaceChildren();
           splitLeft.style.opacity = '0';
           pipe.style.opacity = '0';
           infographic.style.opacity = '0';
