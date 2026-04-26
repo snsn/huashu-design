@@ -1,5 +1,6 @@
 ---
 name: huashu-design
+description: HTML 기반 고품질 디자인 산출물을 만드는 한국어 우선 에이전트 스킬
 version: 2.1.0-ko
 summary: HTML 기반 고품질 디자인 산출물을 만드는 한국어 우선 에이전트 스킬
 ---
